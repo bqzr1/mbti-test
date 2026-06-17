@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ MBTI 人格测试 ✨</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@keyframes slideBar {
+  from { width: 0%; }
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+body {
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fce4ec, #e1bee7, #b3e5fc, #c8e6c9, #fff9c4, #fce4ec);
+  background-size: 600% 600%;
+  animation: gradientBG 20s ease infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 680px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  padding: 48px 40px;
+  box-shadow: 0 8px 32px rgba(180, 140, 200, 0.25), 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid rgba(255,255,255,0.6);
+  animation: fadeIn 0.6s ease;
+}
+
+/* ========== Welcome Page ========== */
+.welcome-emoji {
+  font-size: 72px;
+  text-align: center;
+  animation: float 3s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+.welcome-title {
+  font-size: 36px;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, #e91e90, #9c27b0, #2196f3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+.welcome-sub {
+  text-align: center;
+  color: #7b6b8a;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+.welcome-tags {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.tag {
+  background: linear-gradient(135deg, #f8bbd0, #e1bee7);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #6a3d7d;
+  font-weight: 600;
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #f06292, #ba68c8, #7986cb);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(186, 104, 200, 0.35);
+  letter-spacing: 1px;
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(186, 104, 200, 0.5);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ========== Progress Bar ========== */
+.progress-section {
+  margin-bottom: 32px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.progress-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8e6aad;
+}
+.progress-bar {
+  height: 10px;
+  background: #f0e6f6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f06292, #ba68c8, #7986cb);
+  border-radius: 10px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideBar 0.5s ease;
+}
+
+/* ========== Question Page ========== */
+.question-category {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+.cat-ei { background: #fce4ec; color: #c2185b; }
+.cat-sn { background: #e8f5e9; color: #388e3c; }
+.cat-tf { background: #e3f2fd; color: #1565c0; }
+.cat-jp { background: #fff3e0; color: #e65100; }
+
+.question-text {
+  font-size: 19px;
+  font-weight: 700;
+  color: #3d2d52;
+  line-height: 1.7;
+  margin-bottom: 28px;
+  min-height: 52px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.option-card {
+  background: rgba(255,255,255,0.9);
+  border: 2px solid #ede4f7;
+  border-radius: 18px;
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.option-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(240,98,146,0.05), rgba(186,104,200,0.08));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.option-card:hover {
+  border-color: #ce93d8;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(186,104,200,0.2);
+}
+.option-card:hover::before { opacity: 1; }
+.option-card:active {
+  transform: translateY(0) scale(0.98);
+}
+.option-card.selected {
+  border-color: #ab47bc;
+  background: linear-gradient(135deg, rgba(240,98,146,0.08), rgba(186,104,200,0.12));
+  box-shadow: 0 4px 16px rgba(171,71,188,0.2);
+}
+.option-letter {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8bbd0, #e1bee7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  color: #7b3d8a;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.option-card.selected .option-letter {
+  background: linear-gradient(135deg, #f06292, #ba68c8);
+  color: white;
+}
+.option-text {
+  font-size: 15px;
+  color: #4a3660;
+  line-height: 1.5;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== Loading Page ========== */
+.loading-container {
+  text-align: center;
+  padding: 40px 0;
+}
+.loading-spinner {
+  font-size: 56px;
+  animation: spin 2s linear infinite;
+  margin-bottom: 24px;
+}
+.loading-text {
+  font-size: 18px;
+  color: #7b6b8a;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.loading-sub {
+  font-size: 14px;
+  color: #a896b8;
+}
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+/* ========== Result Page ========== */
+.result-container {
+  text-align: center;
+}
+.result-emoji {
+  font-size: 80px;
+  animation: bounceIn 0.8s ease;
+  margin-bottom: 8px;
+}
+.result-type {
+  font-size: 42px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #e91e90, #9c27b0, #2196f3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+  animation: bounceIn 0.8s ease 0.2s both;
+}
+.result-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #5a3d73;
+  margin-bottom: 12px;
+  animation: bounceIn 0.8s ease 0.35s both;
+}
+.result-desc {
+  font-size: 15px;
+  color: #7b6b8a;
+  line-height: 1.8;
+  margin-bottom: 28px;
+  animation: bounceIn 0.8s ease 0.5s both;
+}
+.result-tags {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+  animation: bounceIn 0.8s ease 0.6s both;
+}
+.result-tag {
+  padding: 5px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.tag-a { background: #fce4ec; color: #c2185b; }
+.tag-b { background: #e8f5e9; color: #388e3c; }
+.tag-c { background: #e3f2fd; color: #1565c0; }
+.tag-d { background: #fff3e0; color: #e65100; }
+.tag-e { background: #f3e5f5; color: #7b1fa2; }
+
+.bar-chart {
+  margin-bottom: 32px;
+  animation: bounceIn 0.8s ease 0.7s both;
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+.bar-label {
+  width: 80px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5a3d73;
+  flex-shrink: 0;
+}
+.bar-track {
+  flex: 1;
+  height: 22px;
+  background: #f0e6f6;
+  border-radius: 11px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 11px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.bar-fill.ei { background: linear-gradient(90deg, #f48fb1, #ec407a); }
+.bar-fill.sn { background: linear-gradient(90deg, #a5d6a7, #66bb6a); }
+.bar-fill.tf { background: linear-gradient(90deg, #90caf9, #42a5f5); }
+.bar-fill.jp { background: linear-gradient(90deg, #ffcc80, #ffa726); }
+.bar-value {
+  width: 52px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #7b6b8a;
+  flex-shrink: 0;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 14px 40px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #7b3d8a;
+  background: linear-gradient(135deg, #f8bbd0, #e1bee7);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 12px rgba(186,104,200,0.2);
+  animation: bounceIn 0.8s ease 0.85s both;
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(186,104,200,0.35);
+}
+
+.hidden { display: none !important; }
+
+/* ========== Sparkles ========== */
+.sparkle-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+.sparkle {
+  position: absolute;
+  font-size: 20px;
+  animation: sparkle 3s ease-in-out infinite;
+}
+</style>
+</head>
+<body>
+
+<div class="sparkle-bg" id="sparkleBg"></div>
+
+<div class="container">
+  <!-- Welcome Page -->
+  <div class="card" id="page-welcome">
+    <div class="welcome-emoji">🔮</div>
+    <h1 class="welcome-title">MBTI 人格测试</h1>
+    <p class="welcome-sub">
+      20道精选趣味题目<br>
+      发现隐藏的你 ✨ 测测你是哪种人格类型？
+    </p>
+    <div class="welcome-tags">
+      <span class="tag">🎯 20道题</span>
+      <span class="tag">⏱ 约5分钟</span>
+      <span class="tag">💝 16种人格</span>
+      <span class="tag">🌟 超准确</span>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">🚀 开始探索自我</button>
+  </div>
+
+  <!-- Question Page -->
+  <div class="card hidden" id="page-question">
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label" id="progressLabel">第 1 题 / 共 20 题</span>
+        <span class="progress-label" id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+    <div id="categoryBadge"></div>
+    <div class="question-text" id="questionText"></div>
+    <div class="options" id="optionsContainer"></div>
+  </div>
+
+  <!-- Loading Page -->
+  <div class="card hidden" id="page-loading">
+    <div class="loading-container">
+      <div class="loading-spinner">🧠</div>
+      <div class="loading-text">正在分析你的性格...</div>
+      <div class="loading-sub">别急，好结果值得等待<span class="loading-dots"></span></div>
+    </div>
+  </div>
+
+  <!-- Result Page -->
+  <div class="card hidden" id="page-result">
+    <div class="result-container">
+      <div class="result-emoji" id="resultEmoji"></div>
+      <div class="result-type" id="resultType"></div>
+      <div class="result-name" id="resultName"></div>
+      <div class="result-desc" id="resultDesc"></div>
+      <div class="result-tags" id="resultTags"></div>
+      <div class="bar-chart" id="barChart"></div>
+      <button class="btn-secondary" onclick="restartQuiz()">🔄 再测一次</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Questions Database =====
+const questions = [
+  // E/I 维度 (1-5)
+  {
+    category: 'ei', catLabel: '社交能量', catClass: 'cat-ei',
+    text: '周末到了，你更期待怎么过？',
+    options: [
+      { text: '约朋友出去嗨！人多才热闹嘛 🎉', score: 'E' },
+      { text: '宅在家里看书追剧，享受独处时光 📚' }
+    ]
+  },
+  {
+    category: 'ei', catLabel: '社交能量', catClass: 'cat-ei',
+    text: '参加一个全是陌生人的聚会，你会？',
+    options: [
+      { text: '主动和别人聊天，很快就能混熟 😄', score: 'E' },
+      { text: '找个角落待着，等熟人来了再说 🫣' }
+    ]
+  },
+  {
+    category: 'ei', catLabel: '社交能量', catClass: 'cat-ei',
+    text: '遇到开心事，你的第一反应是？',
+    options: [
+      { text: '马上找朋友分享！一起开心加倍！ 🗣️', score: 'E' },
+      { text: '自己在心里偷着乐，回味一下 😊' }
+    ]
+  },
+  {
+    category: 'ei', catLabel: '社交能量', catClass: 'cat-ei',
+    text: '连续社交了一周后，周一早上你感觉？',
+    options: [
+      { text: '充好电了！还想继续社交 🔋', score: 'E' },
+      { text: '电量告急……需要一个人静静 🔌' }
+    ]
+  },
+  {
+    category: 'ei', catLabel: '社交能量', catClass: 'cat-ei',
+    text: '小组讨论时，你通常是？',
+    options: [
+      { text: '第一个发言，边说边想 💬', score: 'E' },
+      { text: '先想好了再说，偶尔补充几句 🤔' }
+    ]
+  },
+  // S/N 维度 (6-10)
+  {
+    category: 'sn', catLabel: '信息方式', catClass: 'cat-sn',
+    text: '看一部电影，你最在意的是？',
+    options: [
+      { text: '剧情细节和逻辑是否合理 🎬', score: 'S' },
+      { text: '电影想表达的深层含义和隐喻 🧩' }
+    ]
+  },
+  {
+    category: 'sn', catLabel: '信息方式', catClass: 'cat-sn',
+    text: '朋友给你讲一件事，你更关注？',
+    options: [
+      { text: '具体发生了什么、时间地点人物 📋', score: 'S' },
+      { text: '这件事背后的含义和可能的走向 🔮' }
+    ]
+  },
+  {
+    category: 'sn', catLabel: '信息方式', catClass: 'cat-sn',
+    text: '买一个新东西前，你更喜欢？',
+    options: [
+      { text: '看真实评价和实际参数 📊', score: 'S' },
+      { text: '凭直觉感受它合不合眼缘 ✨' }
+    ]
+  },
+  {
+    category: 'sn', catLabel: '信息方式', catClass: 'cat-sn',
+    text: '别人说你"想太多"，你会？',
+    options: [
+      { text: '我觉得脚踏实地更重要 🏠', score: 'S' },
+      { text: '不想象可能性世界该多无聊啊 🌈' }
+    ]
+  },
+  {
+    category: 'sn', catLabel: '信息方式', catClass: 'cat-sn',
+    text: '学新东西的时候，你更倾向？',
+    options: [
+      { text: '一步一步来，先掌握基础操作 🪜', score: 'S' },
+      { text: '先了解整体框架和大方向 🗺️' }
+    ]
+  },
+  // T/F 维度 (11-15)
+  {
+    category: 'tf', catLabel: '决策方式', catClass: 'cat-tf',
+    text: '好朋友失恋了来找你哭诉，你会？',
+    options: [
+      { text: '帮他分析问题出在哪，给出解决方案 💡', score: 'T' },
+      { text: '先抱抱他，陪他一起难过 😢' }
+    ]
+  },
+  {
+    category: 'tf', catLabel: '决策方式', catClass: 'cat-tf',
+    text: '朋友做了一个你很不同意决定，你会？',
+    options: [
+      { text: '直接告诉他哪里不对，诚实最重要 🎯', score: 'T' },
+      { text: '委婉表达关心，不想伤害他的感情 🤗' }
+    ]
+  },
+  {
+    category: 'tf', catLabel: '决策方式', catClass: 'cat-tf',
+    text: '选专业/职业时，你更看重？',
+    options: [
+      { text: '发展前景和收入水平 💰', score: 'T' },
+      { text: '是不是自己真正热爱的 ❤️' }
+    ]
+  },
+  {
+    category: 'tf', catLabel: '决策方式', catClass: 'cat-tf',
+    text: '吵架时，你觉得什么更重要？',
+    options: [
+      { text: '把道理讲清楚，谁对谁错要分明 ⚖️', score: 'T' },
+      { text: '对方的感受，感情比道理重要 🫂' }
+    ]
+  },
+  {
+    category: 'tf', catLabel: '决策方式', catClass: 'cat-tf',
+    text: '看到一则新闻，你更容易被什么打动？',
+    options: [
+      { text: '数据分析和客观事实 📈', score: 'T' },
+      { text: '故事中人物的命运和情感 🥺' }
+    ]
+  },
+  // J/P 维度 (16-20)
+  {
+    category: 'jp', catLabel: '生活方式', catClass: 'cat-jp',
+    text: '出门旅行前，你的习惯是？',
+    options: [
+      { text: '做好详细攻略，几点去哪都安排好了 📝', score: 'J' },
+      { text: '到那儿再说，随性才是旅行的意义 🎒' }
+    ]
+  },
+  {
+    category: 'jp', catLabel: '生活方式', catClass: 'cat-jp',
+    text: '书桌/房间的状态一般是？',
+    options: [
+      { text: '整整齐齐，东西都有固定位置 🗂️', score: 'J' },
+      { text: '有点乱但我知道东西在哪 📦' }
+    ]
+  },
+  {
+    category: 'jp', catLabel: '生活方式', catClass: 'cat-jp',
+    text: 'Deadline是明天，你现在？',
+    options: [
+      { text: '早就完成了，不喜欢赶deadline的压力 ✅', score: 'J' },
+      { text: '最后一刻才有灵感，越紧张效率越高 ⚡' }
+    ]
+  },
+  {
+    category: 'jp', catLabel: '生活方式', catClass: 'cat-jp',
+    text: '突然放假三天，你会？',
+    options: [
+      { text: '列个计划表，高效利用假期 📅', score: 'J' },
+      { text: '睡到自然醒，走到哪算哪 😴' }
+    ]
+  },
+  {
+    category: 'jp', catLabel: '生活方式', catClass: 'cat-jp',
+    text: '做选择题时，你更倾向于？',
+    options: [
+      { text: '尽快确定答案，不喜欢悬而未决的感觉 ✍️', score: 'J' },
+      { text: '留着弹性，万一有更好的选择呢 🦋' }
+    ]
+  }
+];
+
+// ===== 16 Personality Types =====
+const personalityTypes = {
+  'INTJ': { emoji: '🧙‍♂️', name: '建筑师', desc: '你是战略家型的天才！眼光长远，独立自主，总能看到别人看不到的模式。你的大脑就像一台超级计算机，不断运算着最优解。虽然外表高冷，但内心对在乎的人温柔至极~', tags: ['天才战略家', '独立冷静', '追求完美', '深谋远虑'] },
+  'INTP': { emoji: '🔬', name: '逻辑学家', desc: '你是天生的哲学家！对知识有着无尽的渴望，喜欢拆解各种概念和理论。你的思维像蜘蛛网一样精密而优雅，总能找到事物之间隐藏的联系。脑洞大到能装下整个宇宙！', tags: ['好奇宝宝', '逻辑大师', '脑洞大开', '理性客观'] },
+  'ENTJ': { emoji: '👑', name: '指挥官', desc: '生来就是领袖！你果断、自信、充满气场。走到哪里都能自然而然地掌控局面。你的目标感极强，不达目的誓不罢休。朋友们都说："跟着老大，有肉吃！"', tags: ['天生领袖', '雷厉风行', '目标明确', '气场两米八'] },
+  'ENTP': { emoji: '🎭', name: '辩论家', desc: '你是机智的冒险家！头脑转得比谁都快，热爱挑战和新鲜事物。你喜欢和别人辩论，不是为了赢，而是因为这个过程让你上瘾。你的创意无穷无尽，是朋友圈里的开心果兼智囊团！', tags: ['机智幽默', '挑战权威', '创意无限', '永动机'] },
+  'INFJ': { emoji: '🌙', name: '提倡者', desc: '你是世界上最稀有的类型之一！温柔而有力量，直觉准到让人害怕。你能看透人心却不说破，像一位安静的女巫。你内心深处有一个理想世界，并默默为之努力。', tags: ['神秘深邃', '直觉超强', '温柔坚定', '理想主义'] },
+  'INFP': { emoji: '🦄', name: '调停者', desc: '你是梦幻的浪漫主义者！内心住着一个诗人，对世界充满美好的想象。你敏感而善良，能感受到别人忽略的情绪。你的想象力丰富到可以写出一百本小说！', tags: ['浪漫诗人', '善良纯粹', '想象力爆棚', '灵魂歌手'] },
+  'ENFJ': { emoji: '🌟', name: '主人公', desc: '你是自带光芒的小太阳！天生的鼓舞者，总能让身边的人变得更好。你的共情能力超强，能敏锐察觉每个人的需求。朋友们都说："有你在的地方就充满温暖！"', tags: ['小太阳', '鼓舞人心', '共情达人', '团队灵魂'] },
+  'ENFP': { emoji: '🎪', name: '竞选者', desc: '你是自由的灵魂！热情似火，充满活力，走到哪里都能点燃周围的人。你的脑洞和创意源源不断，永远在探索新的可能性。生活对你来说就是一场盛大的冒险！', tags: ['自由灵魂', '热情洋溢', '创意无限', '快乐源泉'] },
+  'ISTJ': { emoji: '🏛️', name: '物流师', desc: '你是最靠谱的存在！一丝不苟、认真负责，说到做到。你的记忆力超群，细节控中的战斗机。朋友们有困难第一个想到的就是你——因为你真的会帮忙解决！', tags: ['超级靠谱', '一丝不苟', '细节控', '行动派'] },
+  'ISFJ': { emoji: '🛡️', name: '守卫者', desc: '你是默默付出的守护者！细心体贴、温暖可靠，总是把别人的需要放在心上。你可能不会说甜言蜜语，但你做的每一件事都在说"我在乎你"。你是这个世界最珍贵的存在~', tags: ['温暖守护', '细心体贴', '默默付出', '人间宝藏'] },
+  'ESTJ': { emoji: '📋', name: '总经理', desc: '你是效率的化身！组织能力超强，做事有条不紊，是天生的管理者。你喜欢秩序和规则，因为你知道这样最高效。在你的带领下，没有完成不了的任务！', tags: ['效率之王', '组织大师', '言出必行', '团队支柱'] },
+  'ESFJ': { emoji: '🤗', name: '执政官', desc: '你是社交圈的中心！热心肠、爱操心，总能照顾到每个人的感受。你擅长营造温馨和谐的氛围，有你在的地方永远充满欢声笑语。你是大家公认的"团宠"和"暖心担当"！', tags: ['社交中心', '热心肠', '气氛担当', '暖心天使'] },
+  'ISTP': { emoji: '🔧', name: '鉴赏家', desc: '你是沉默的工匠！动手能力强到离谱，什么东西到你手里都能修好。你不爱废话，但关键时刻永远靠得住。你的冷静和实用主义让你在危机中闪闪发光。', tags: ['沉默工匠', '动手达人', '冷静务实', '危机处理'] },
+  'ISFP': { emoji: '🎨', name: '探险家', desc: '你是活在当下的艺术家！审美一流，感受力超强，能用独特的视角发现生活中的美。你不喜欢被约束，追求自由和个性化的生活方式。你的存在本身就是一件艺术品~', tags: ['生活艺术家', '审美在线', '自由随心', '温柔细腻'] },
+  'ESTP': { emoji: '🏄', name: '企业家', desc: '你是行动派的极限运动员！精力旺盛，喜欢刺激和挑战，永远在寻找下一个冒险。你的临场反应快得惊人，是那种"先做了再说"的狠人。和你在一起永远不会无聊！', tags: ['行动派', '冒险精神', '临场王', '活力无限'] },
+  'ESFP': { emoji: '🎤', name: '表演家', desc: '你是天生的舞台之星！走到哪里都是焦点，你的热情和感染力能让所有人都开心起来。你热爱生活、享受当下，认为人生就是一场派对！有你在的场合永远不缺笑声~', tags: ['舞台之星', '感染力强', '派对女王', '活在当下'] }
+};
+
+// ===== State =====
+let currentQ = 0;
+let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+// ===== Sparkles Background =====
+function createSparkles() {
+  const bg = document.getElementById('sparkleBg');
+  const emojis = ['✨', '⭐', '💫', '🌟', '💖', '🌸', '🦋'];
+  for (let i = 0; i < 15; i++) {
+    const s = document.createElement('span');
+    s.className = 'sparkle';
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 3) + 's';
+    s.style.fontSize = (14 + Math.random() * 16) + 'px';
+    bg.appendChild(s);
+  }
+}
+createSparkles();
+
+// ===== Navigation =====
+function showPage(id) {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  const page = document.getElementById('page-' + id);
+  page.classList.remove('hidden');
+  page.style.animation = 'none';
+  page.offsetHeight; // reflow
+  page.style.animation = 'fadeIn 0.6s ease';
+}
+
+// ===== Start Quiz =====
+function startQuiz() {
+  currentQ = 0;
+  scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+  showPage('question');
+  renderQuestion();
+}
+
+// ===== Render Question =====
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
+
+  // Progress
+  const pct = Math.round((currentQ / total) * 100);
+  document.getElementById('progressLabel').textContent = `第 ${currentQ + 1} 题 / 共 ${total} 题`;
+  document.getElementById('progressPercent').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Category badge
+  document.getElementById('categoryBadge').innerHTML =
+    `<span class="question-category ${q.catClass}">${q.catLabel}</span>`;
+
+  // Question text
+  document.getElementById('questionText').textContent = q.text;
+
+  // Options
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  const letters = ['A', 'B'];
+  q.options.forEach((opt, i) => {
+    const card = document.createElement('div');
+    card.className = 'option-card';
+    card.innerHTML = `
+      <span class="option-letter">${letters[i]}</span>
+      <span class="option-text">${opt.text}</span>
+    `;
+    card.addEventListener('click', () => selectOption(card, opt.score));
+    container.appendChild(card);
+  });
+}
+
+// ===== Select Option =====
+function selectOption(card, score) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+
+  scores[score]++;
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) {
+      renderQuestion();
+    } else {
+      showLoading();
+    }
+  }, 350);
+}
+
+// ===== Loading =====
+function showLoading() {
+  showPage('loading');
+  const messages = [
+    '正在分析你的性格...',
+    '读取你的潜意识...',
+    '匹配人格类型...',
+    '即将揭晓答案...'
+  ];
+  let msgIdx = 0;
+  const textEl = document.querySelector('.loading-text');
+  const subEl = document.querySelector('.loading-sub');
+  const interval = setInterval(() => {
+    msgIdx = (msgIdx + 1) % messages.length;
+    textEl.textContent = messages[msgIdx];
+    subEl.innerHTML = '别急，好结果值得等待<span class="loading-dots"></span>';
+  }, 800);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    showResult();
+  }, 3200);
+}
+
+// ===== Show Result =====
+function showResult() {
+  const type = getResultType();
+  const info = personalityTypes[type];
+
+  // Calculate percentages
+  const eiTotal = scores.E + scores.I;
+  const snTotal = scores.S + scores.N;
+  const tfTotal = scores.T + scores.F;
+  const jpTotal = scores.J + scores.P;
+
+  const eiPct = eiTotal > 0 ? Math.round((Math.max(scores.E, scores.I) / eiTotal) * 100) : 50;
+  const snPct = snTotal > 0 ? Math.round((Math.max(scores.S, scores.N) / snTotal) * 100) : 50;
+  const tfPct = tfTotal > 0 ? Math.round((Math.max(scores.T, scores.F) / tfTotal) * 100) : 50;
+  const jpPct = jpTotal > 0 ? Math.round((Math.max(scores.J, scores.P) / jpTotal) * 100) : 50;
+
+  // Fill result
+  document.getElementById('resultEmoji').textContent = info.emoji;
+  document.getElementById('resultType').textContent = type;
+  document.getElementById('resultName').textContent = info.name;
+  document.getElementById('resultDesc').textContent = info.desc;
+
+  // Tags
+  const tagsEl = document.getElementById('resultTags');
+  tagsEl.innerHTML = '';
+  const tagClasses = ['tag-a', 'tag-b', 'tag-c', 'tag-d', 'tag-e'];
+  info.tags.forEach((tag, i) => {
+    const el = document.createElement('span');
+    el.className = 'result-tag ' + tagClasses[i % tagClasses.length];
+    el.textContent = tag;
+    tagsEl.appendChild(el);
+  });
+
+  // Bar chart
+  const chartEl = document.getElementById('barChart');
+  chartEl.innerHTML = '';
+  const barData = [
+    { label: getDimensionLabel('E', 'I'), left: scores.E, right: scores.I, pct: eiPct, cls: 'ei', leftLetter: 'E', rightLetter: 'I' },
+    { label: getDimensionLabel('S', 'N'), left: scores.S, right: scores.N, pct: snPct, cls: 'sn', leftLetter: 'S', rightLetter: 'N' },
+    { label: getDimensionLabel('T', 'F'), left: scores.T, right: scores.F, pct: tfPct, cls: 'tf', leftLetter: 'T', rightLetter: 'F' },
+    { label: getDimensionLabel('J', 'P'), left: scores.J, right: scores.P, pct: jpPct, cls: 'jp', leftLetter: 'J', rightLetter: 'P' }
+  ];
+
+  barData.forEach((bar, idx) => {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    const dominant = bar.left >= bar.right ? bar.leftLetter : bar.rightLetter;
+    const dominantPct = bar.pct;
+    const recessivePct = 100 - bar.pct;
+    const fillWidth = bar.left >= bar.right ? dominantPct : recessivePct;
+    const fillPos = bar.left >= bar.right ? (100 - dominantPct) : 0;
+
+    row.innerHTML = `
+      <span class="bar-label">${dominant} ${dominantPct}%</span>
+      <div class="bar-track">
+        <div class="bar-fill ${bar.cls}" style="width: ${fillWidth}%; margin-left: ${fillPos}%;"></div>
+      </div>
+      <span class="bar-value">${bar.leftLetter} ${bar.left}/${bar.right} ${bar.rightLetter}</span>
+    `;
+    chartEl.appendChild(row);
+  });
+
+  showPage('result');
+
+  // Animate bars after page shown
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      const w = bar.style.width;
+      const ml = bar.style.marginLeft;
+      bar.style.width = '0%';
+      bar.style.marginLeft = '0%';
+      setTimeout(() => {
+        bar.style.width = w;
+        bar.style.marginLeft = ml;
+      }, 100);
+    });
+  }, 800);
+}
+
+function getDimensionLabel(left, right) {
+  const map = { 'EI': '外向↔内向', 'SN': '实感↔直觉', 'TF': '思考↔感受', 'JP': '判断↔感知' };
+  const key = [left, right].sort().join('');
+  return map[key] || '';
+}
+
+function getResultType() {
+  let type = '';
+  type += scores.E >= scores.I ? 'E' : 'I';
+  type += scores.S >= scores.N ? 'S' : 'N';
+  type += scores.T >= scores.F ? 'T' : 'F';
+  type += scores.J >= scores.P ? 'J' : 'P';
+  return type;
+}
+
+// ===== Restart =====
+function restartQuiz() {
+  showPage('welcome');
+}
+</script>
+</body>
+</html>
